@@ -5,13 +5,13 @@ import pandas as pd
 csv_youtube_baixa = 'youtube_baixa.csv'
 csv_youtube_media = 'youtube_media.csv'
 csv_youtube_alta = 'youtube_alta.csv'
-csv_torrent = 'atlantis.csv'
+csv_torrent = 'torrent.csv'
 
-# Carregurando os arquivos CSV em DataFrames do pandas
+# Carregando os arquivos CSV em DataFrames do pandas
 baixa_df = pd.read_csv(csv_youtube_baixa) # Clipe LSD Sia em 144p
 media_df = pd.read_csv(csv_youtube_baixa) # Clipe LSD Sia em 480p
 alta_df = pd.read_csv(csv_youtube_alta) # Clipe LSD Sia em 1080p
-torrent_df = pd.read_csv(csv_torrent) # Filme Atlatis em 1080p
+torrent_df = pd.read_csv(csv_torrent) # Episodio piloto de Love+Death Robots em 720p
 
 class trafego:
     def __init__(self, valor):
@@ -40,33 +40,33 @@ class trafego:
 
 # Criando uma lista de objetos
 tipos_de_trafego = [trafego('Nivel baixo - 144p'), trafego('Nivel medio - 480p'), trafego('Nivel alto - 1080p'),
-                    trafego('Torrent')]
+                    trafego('Torrent P2P')]
 
 
 print("Estatísticas para tráfego de dados:")
 for tipo in tipos_de_trafego:
     if tipo.valor == 'Nivel baixo - 144p':
-        filtro = baixa_df['Protocol'] == 'QUIC'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
+        filtro = baixa_df['Protocol'] == 'QUIC'  # Protocolo usado nos vídeos de streaming
         estatisticas = trafego.calcular_estatisticas(baixa_df[filtro])
-        print('Clipe de LSD - Sia no Youtube')
+        print('Clipe de LSD - Sia no Youtube de 3min')
         trafego.imprimir_resultados(tipo.valor, estatisticas)
         
     if tipo.valor == 'Nivel medio - 480p':
-        filtro = media_df['Protocol'] == 'QUIC'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
+        filtro = media_df['Protocol'] == 'QUIC'  # Protocolo usado nos vídeos de streaming
         estatisticas = trafego.calcular_estatisticas(media_df[filtro])
-        print('Nível do clipe de LSD - Sia no Youtube')
+        print('Clipe de LSD - Sia no Youtube de 3min')
         trafego.imprimir_resultados(tipo.valor, estatisticas)
         
     if tipo.valor == 'Nivel alto - 1080p':
-        filtro = alta_df['Protocol'] == 'QUIC'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
+        filtro = alta_df['Protocol'] == 'QUIC'  # Protocolo usado nos vídeos de streaming
         estatisticas = trafego.calcular_estatisticas(alta_df[filtro])
-        print('Nível do clipe de LSD - Sia no Youtube')
+        print('Clipe de LSD - Sia no Youtube de 3min')
         trafego.imprimir_resultados(tipo.valor, estatisticas)
 
-    if tipo.valor == 'Torrent':
-        filtro = torrent_df['Info'] == 'BitTorrent DHT Protocol'  # Ajuste o filtro de acordo com o protocolo ou informação relacionada ao tipo de tráfego
+    if tipo.valor == 'Torrent P2P':
+        filtro = torrent_df['Protocol'] == 'BitTorrent'  # Protocolo ou informação relacionada ao tipo de tráfego de torrent
         estatisticas = trafego.calcular_estatisticas(torrent_df[filtro])
-        print('Torrent do filme de Atlantis - O Reino Perdido em 1080p')
+        print('Episodio piloto de Love+Death Robots em 720p de 11min')
         trafego.imprimir_resultados(tipo.valor, estatisticas)
         print()
 
