@@ -1,5 +1,6 @@
 # Projeto sobre Monitoramento de Tráfego de Natália Aragão e Rebeca Teófilo
 import pandas as pd
+import numpy as np
 
 # Definindo os arquivos CSV de tráfego a serem analisados
 csv_youtube_baixa = 'youtube_baixa.csv'
@@ -9,7 +10,7 @@ csv_torrent = 'torrent.csv'
 
 # Carregando os arquivos CSV em DataFrames do pandas
 baixa_df = pd.read_csv(csv_youtube_baixa) # Clipe LSD Sia em 144p
-media_df = pd.read_csv(csv_youtube_baixa) # Clipe LSD Sia em 480p
+media_df = pd.read_csv(csv_youtube_media) # Clipe LSD Sia em 480p
 alta_df = pd.read_csv(csv_youtube_alta) # Clipe LSD Sia em 1080p
 torrent_df = pd.read_csv(csv_torrent) # Episodio piloto de Love+Death Robots em 720p
 
@@ -22,11 +23,11 @@ class trafego:
 
     # Função para calcular as estatísticas
     def calcular_estatisticas(dataframe):
-        tamanho_medio = dataframe['Length'].mean()
-        tamanho_desvio_padrao = dataframe['Length'].std()
-        intervalos = dataframe['Time'].diff()
-        intervalo_medio = intervalos.mean()
-        intervalo_desvio_padrao = intervalos.std()
+        tamanho_medio = np.mean(dataframe['Length'])
+        tamanho_desvio_padrao = np.std(dataframe['Length'])
+        intervalos = np.diff(dataframe['Time'])
+        intervalo_medio = np.mean(intervalos)
+        intervalo_desvio_padrao = np.std(intervalos)
         numero_pacotes = len(dataframe)
         return tamanho_medio, tamanho_desvio_padrao, intervalo_medio, intervalo_desvio_padrao, numero_pacotes
 
