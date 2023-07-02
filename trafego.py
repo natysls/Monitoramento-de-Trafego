@@ -1,45 +1,72 @@
-#Projeto de Natália Aragão e Rebeca Teófilo
+# Projeto sobre Monitoramento de Tráfego de Natália Aragão e Rebeca Teófilo
 import pandas as pd
 
-# Defina o arquivo CSV de tráfego a ser analisado
-csv_file = 'trafego.csv'
+# Definindo os arquivos CSV de tráfego a serem analisados
+csv_youtube_baixa = 'youtube_baixa.csv'
+csv_youtube_media = 'youtube_media.csv'
+csv_youtube_alta = 'youtube_alta.csv'
+csv_torrent = 'atlantis.csv'
 
-# Carregue o arquivo CSV em um DataFrame do pandas
-df = pd.read_csv(csv_file)
+# Carregurando os arquivos CSV em DataFrames do pandas
+baixa_df = pd.read_csv(csv_youtube_baixa) # Clipe LSD Sia em 144p
+media_df = pd.read_csv(csv_youtube_baixa) # Clipe LSD Sia em 480p
+alta_df = pd.read_csv(csv_youtube_alta) # Clipe LSD Sia em 1080p
+torrent_df = pd.read_csv(csv_torrent) # Filme Atlatis em 1080p
 
-# Função para calcular as estatísticas
-def calcular_estatisticas(dataframe):
-    tamanho_medio = dataframe['Length'].mean()
-    tamanho_desvio_padrao = dataframe['Length'].std()
-    intervalos = dataframe['Time'].diff()
-    intervalo_medio = intervalos.mean()
-    intervalo_desvio_padrao = intervalos.std()
-    numero_pacotes = len(dataframe)
+class trafego:
+    def __init__(self, valor):
+        self.valor = valor
 
-    return tamanho_medio, tamanho_desvio_padrao, intervalo_medio, intervalo_desvio_padrao, numero_pacotes
+    def valor(self):
+        return self.valor
 
-# Calcular estatísticas para vídeos de streaming
-print("Estatísticas para vídeos de streaming:")
-for nivel in range(3):
-    filtro = df['Protocol'] == 'HTTP'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
-    estatisticas = calcular_estatisticas(df[filtro])
-    print(f"Nível: {nivel}")
-    print(f"Tamanho médio de pacotes: {estatisticas[0]}")
-    print(f"Desvio padrão de pacotes: {estatisticas[1]}")
-    print(f"Intervalo médio entre pacotes: {estatisticas[2]}")
-    print(f"Desvio padrão entre pacotes: {estatisticas[3]}")
-    print(f"Número de pacotes: {estatisticas[4]}")
-    print()
+    # Função para calcular as estatísticas
+    def calcular_estatisticas(dataframe):
+        tamanho_medio = dataframe['Length'].mean()
+        tamanho_desvio_padrao = dataframe['Length'].std()
+        intervalos = dataframe['Time'].diff()
+        intervalo_medio = intervalos.mean()
+        intervalo_desvio_padrao = intervalos.std()
+        numero_pacotes = len(dataframe)
+        return tamanho_medio, tamanho_desvio_padrao, intervalo_medio, intervalo_desvio_padrao, numero_pacotes
 
-# Calcular estatísticas para tráfego de dados
+    def imprimir_resultados(nivel, estatisticas):
+        print(f"Tipo: {nivel}\n" + 
+                f"Tamanho médio de pacotes: {estatisticas[0]}\n" +
+                f"Desvio padrão de pacotes: {estatisticas[1]}\n" + 
+                f"Intervalo médio entre pacotes: {estatisticas[2]}\n" + 
+                f"Desvio padrão entre pacotes: {estatisticas[3]}\n" +
+                f"Número de pacotes: {estatisticas[4]}\n")
+
+# Criando uma lista de objetos
+tipos_de_trafego = [trafego('Nivel baixo - 144p'), trafego('Nivel medio - 480p'), trafego('Nivel alto - 1080p'),
+                    trafego('Torrent')]
+
+
 print("Estatísticas para tráfego de dados:")
-for tipo in ['páginas_web', 'download_arquivos', 'p2p']:  # Ajuste os tipos de tráfego conforme suas colunas ou informações específicas
-    filtro = df['Info'] == 'Aplication Data'  # Ajuste o filtro de acordo com o protocolo ou informação relacionada ao tipo de tráfego
-    estatisticas = calcular_estatisticas(df[filtro])
-    print(f"Tipo: {tipo}")
-    print(f"Tamanho médio de pacotes: {estatisticas[0]}")
-    print(f"Desvio padrão de pacotes: {estatisticas[1]}")
-    print(f"Intervalo médio entre pacotes: {estatisticas[2]}")
-    print(f"Desvio padrão entre pacotes: {estatisticas[3]}")
-    print(f"Número de pacotes: {estatisticas[4]}")
-    print()
+for tipo in tipos_de_trafego:
+    if tipo.valor == 'Nivel baixo - 144p':
+        filtro = baixa_df['Protocol'] == 'QUIC'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
+        estatisticas = trafego.calcular_estatisticas(baixa_df[filtro])
+        print('Clipe de LSD - Sia no Youtube')
+        trafego.imprimir_resultados(tipo.valor, estatisticas)
+        
+    if tipo.valor == 'Nivel medio - 480p':
+        filtro = media_df['Protocol'] == 'QUIC'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
+        estatisticas = trafego.calcular_estatisticas(media_df[filtro])
+        print('Nível do clipe de LSD - Sia no Youtube')
+        trafego.imprimir_resultados(tipo.valor, estatisticas)
+        
+    if tipo.valor == 'Nivel alto - 1080p':
+        filtro = alta_df['Protocol'] == 'QUIC'  # Ajuste o filtro de acordo com o protocolo usado nos vídeos de streaming
+        estatisticas = trafego.calcular_estatisticas(alta_df[filtro])
+        print('Nível do clipe de LSD - Sia no Youtube')
+        trafego.imprimir_resultados(tipo.valor, estatisticas)
+
+    if tipo.valor == 'Torrent':
+        filtro = torrent_df['Info'] == 'BitTorrent DHT Protocol'  # Ajuste o filtro de acordo com o protocolo ou informação relacionada ao tipo de tráfego
+        estatisticas = trafego.calcular_estatisticas(torrent_df[filtro])
+        print('Torrent do filme de Atlantis - O Reino Perdido em 1080p')
+        trafego.imprimir_resultados(tipo.valor, estatisticas)
+        print()
+
